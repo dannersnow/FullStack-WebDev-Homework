@@ -1,4 +1,4 @@
-const express = require('express');
+const express = require("express");
 const app = express();
 const port = process.env.PORT || 5001;
 
@@ -12,22 +12,47 @@ const port = process.env.PORT || 5001;
 
 // For other routes, such as http://localhost:5001/other, this exercise should return a status code 404 with '404 - page not found' in html format
 
-const routes = [
-  'welcome',
-  'redirect',
-  'redirected',
-  'cache',
-  'cookie',
-  'other',
-];
-
-app.get('/', (req, res) => {
+app.get("/", (req, res) => {
   res.status(200);
-  res.set({ 'Content-Type': 'text/html' });
-  res.send('Express Routing Exercise');
+  res.set({ "Content-Type": "text/html" });
+  res.send("Express Routing Exercise");
 });
 
 // Add your code here
+
+// here, instead of using if and else statements we have separate blocks for each
+app.get("/welcome", (req, res) => {
+  res.status(200);
+  res.set({ "Content-Type": "text/html" });
+  res.send("<h1>Welcome!! Woohoo!</h1>");
+});
+
+app.get("/redirect", (req, res) => {
+  res.redirect(302, "/redirected");
+});
+
+app.get("/redirected", (req, res) => {
+  res.status(200);
+  res.send("<h1>You have been redirected!</h1>");
+});
+
+app.get("/cache", (req, res) => {
+  res.status(200);
+  res.set({ "Content-Type": "text/html", "Cache-Control": "max-age=86400" });
+  res.send("this resource was cached");
+});
+
+app.get("/cookie", (req, res) => {
+  res.status(200);
+  res.set({ "Content-Type": "text/plain", "Set-Cookie": "hello=world" });
+  res.send("cookies... yummm");
+});
+
+app.use((req, res) => {
+  res.status(404);
+  res.set({ "Content-Type": "text/html" });
+  res.send("404 - page not found");
+});
 
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
